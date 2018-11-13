@@ -17,3 +17,27 @@ En una Hemeroteca se tiene de cada tipo de revistas sobre Computación (Ej: Byte
 cantidad de meses)(si tienen el mismo número de recibidos entonces se mostrarían las dos revistas).
 6. f)Un reporte ordenado por números de cada revista que se recibió en el año.
 7. g)El programa debe ofrecer una opción de agregar las revistas que quiera
+
+Se creara:
+
+pantalla con datos:
+
+#Revistas Disponibles
+ numero	 titulo  anio
+
+ reporte con:
+ 
+Filtro Mes,tipo
+Nombre,numero,foto,descripcion
+
+Reportes 
+
+* Reporte de meses que no se registro compras de revistas
+
+* Reporte por rango trimestre mostrar promedio de revistas recibidas
+
+* Reporte de continuidad, mas meses (Mas Numeros) , soportar duplicidad de datos.
+
+* Reporte ordenado por numero de cada revista que se recibio en el anio
+
+* El programa debe ofrecer una opcion de agregar las revistas que desee
