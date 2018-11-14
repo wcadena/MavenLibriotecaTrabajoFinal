@@ -1,4 +1,9 @@
-package com.mycompany.mavenproject1proyectofinal;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package vistas;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +26,13 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+/**
+ *
+ * @author wcade
+ */
+public class GeneradorVista extends Application {
 
-public class MainApp extends Application {
-@Override
+    @Override
     public void start(Stage primaryStage) throws Exception {
         //this.gc = new GeneradorController();
         primaryStage.setTitle("Registration Form JavaFX Application");
@@ -368,4 +377,5 @@ public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
