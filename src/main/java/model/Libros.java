@@ -106,6 +106,11 @@ public class Libros {
     public void setMes(Mes mes) {
         this.mes = mes;
     }
+
+    @Override
+    public String toString() {
+        return "Libros{" + "id=" + id + ", author=" + author + ", genre=" + genre + ", publisher=" + publisher + ", title=" + title + ", numero=" + numero + ", created_at=" + created_at + ", update_at=" + update_at + ", delete_at=" + delete_at + ", mes=" + mes + '}';
+    }
     
     
     

@@ -6,7 +6,11 @@
 package testin;
 
 import com.github.javafaker.Faker;
+import static java.lang.ProcessBuilder.Redirect.from;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import junit.framework.TestCase;
 import model.Anio;
 import model.Libros;
@@ -71,7 +75,7 @@ public class LibroJUnitTest extends TestCase {
         System.out.println("Test Anios--->" + as);
     }
 
-    public void testLibros() {
+    public void testLibros() throws ParseException {
 
         ArrayList<Anio> as;
         as = new ArrayList();
@@ -90,11 +94,33 @@ public class LibroJUnitTest extends TestCase {
             a.setMess(ms);
             as.add(a);
         }
-        ArrayList<Libros> ls;
-        as = new ArrayList();
+        ArrayList<Libros> ls = null;
+        ls = new ArrayList();
         Faker faker = new Faker();
         for (int i = 0; i < 200; i++) {
+            Libros l = new Libros();
+            l.setAuthor(faker.book().author());
+            l.setTitle(faker.book().title());
+            l.setGenre(faker.book().genre());
+            l.setPublisher(faker.book().publisher());
+            l.setId(i);
+            l.setNumero(faker.idNumber().hashCode());
+            Date dNow = new Date();
 
+            String date_s = "1985-01-18 00:00:00.0";
+
+            // *** note that it's "yyyy-MM-dd hh:mm:ss" not "yyyy-mm-dd hh:mm:ss"  
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date dateFrom = dt.parse(date_s);
+
+            l.setCreated_at(faker.date().between(dateFrom, dNow));
+            l.setUpdate_at(faker.date().between(dateFrom, dNow));
+            Anio a_util = as.get(Utilitario.randInt(0, 20));
+            Mes m = a_util.getMess().get(Utilitario.randInt(1, 12));
+            l.setMes(m);
+            ls.add(l);
+            
         }
+        System.out.println("---->"+ls);
     }
 }
