@@ -6,6 +6,7 @@
 package testin;
 
 import com.github.javafaker.Faker;
+import java.io.FileNotFoundException;
 import static java.lang.ProcessBuilder.Redirect.from;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -75,7 +76,7 @@ public class LibroJUnitTest extends TestCase {
         System.out.println("Test Anios--->" + as);
     }
 
-    public void testLibros() throws ParseException {
+    public void testLibros() throws ParseException, FileNotFoundException {
 
         ArrayList<Anio> as;
         as = new ArrayList();
@@ -104,7 +105,7 @@ public class LibroJUnitTest extends TestCase {
             l.setGenre(faker.book().genre());
             l.setPublisher(faker.book().publisher());
             l.setId(i);
-            l.setNumero(faker.idNumber().hashCode());
+            l.setNumero(""+faker.idNumber().hashCode());
             Date dNow = new Date();
 
             String date_s = "1985-01-18 00:00:00.0";
@@ -122,5 +123,10 @@ public class LibroJUnitTest extends TestCase {
             
         }
         System.out.println("---->"+ls);
+    }
+    public void testSecuencial() throws FileNotFoundException {
+        Libros l = new Libros();
+        l.setId_secuencial(1);
+        System.out.println("===========================*******>"+l.getId_secuencial());
     }
 }
