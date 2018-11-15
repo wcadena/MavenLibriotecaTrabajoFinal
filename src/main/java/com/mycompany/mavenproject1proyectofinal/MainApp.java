@@ -1,7 +1,11 @@
 package com.mycompany.mavenproject1proyectofinal;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,13 +24,16 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
+import model.Libros;
 
 public class MainApp extends Application {
-@Override
+
+    private int id_libros;
+
+    @Override
     public void start(Stage primaryStage) throws Exception {
         //this.gc = new GeneradorController();
-        primaryStage.setTitle("Registration Form JavaFX Application");
+        primaryStage.setTitle("Biblioteca");
 
         // Create the registration form grid pane
         GridPane gridPane = createRegistrationGenerador();
@@ -70,6 +77,26 @@ public class MainApp extends Application {
         return gridPane;
     }
 
+    private void addInput(GridPane gridPane, TextField campo_texto, String nombre, int posicion) {
+        // Add Name Label
+        Label nameLabel = new Label(nombre);
+        gridPane.add(nameLabel, 0, posicion);
+
+        // Add Name Text Field
+        campo_texto = new TextField();
+        campo_texto.setPrefHeight(40);
+        gridPane.add(campo_texto, 1, posicion);
+    }
+
+    private boolean validate(GridPane gridPane, TextField campo_texto, String nombre) {
+        System.out.println("-------------->"+campo_texto.getText());
+        if (campo_texto.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a " + nombre + ".");
+            return true;
+        }
+        return false;
+    }
+
     private void addUIControls(final GridPane gridPane) {
         // Add Header
         Label headerLabel = new Label("Registration Generator");
@@ -78,73 +105,71 @@ public class MainApp extends Application {
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
 
-        // Add Name Label
-        Label nameLabel = new Label("Fabricante : ");
-        gridPane.add(nameLabel, 0, 1);
+        // Add campos
+        final TextField author = new TextField();
+        this.addInput(gridPane, author, "Autor", 1);
+        final TextField genre = new TextField();
+        this.addInput(gridPane, genre, "Genero", 2);
+        final TextField publisher = new TextField();
+        this.addInput(gridPane, publisher, "Publicadora", 3);
+        final TextField title = new TextField();
+        this.addInput(gridPane, title, "Titulo", 4);
+        final TextField numero = new TextField();
+        this.addInput(gridPane, numero, "Numero", 5);
 
-        // Add Name Text Field
-        final TextField fabricante = new TextField();
-        fabricante.setPrefHeight(40);
-        gridPane.add(fabricante, 1, 1);
-
-        // Add Email Label
-        Label emailLabel = new Label("Modelo : ");
-        gridPane.add(emailLabel, 0, 2);
-
-        // Add Email Text Field
-        final TextField modelo = new TextField();
-        modelo.setPrefHeight(40);
-        gridPane.add(modelo, 1, 2);
-
-        // Add Password Label
-        Label passwordLabel = new Label("Codigo : ");
-        gridPane.add(passwordLabel, 0, 3);
-
-        // Add Password Field
-        final TextField codigo = new TextField();
-        codigo.setPrefHeight(40);
-        gridPane.add(codigo, 1, 3);
-
+        int posicion_boton = 6;
         // Add Submit Button
         Button submitButton = new Button("Crear");
         submitButton.setPrefHeight(40);
         submitButton.setDefaultButton(true);
         submitButton.setPrefWidth(100);
-        gridPane.add(submitButton, 0, 4, 2, 1);
+        gridPane.add(submitButton, 0, posicion_boton, 2, 1);
         GridPane.setHalignment(submitButton, HPos.CENTER);
         GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (fabricante.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a fabricante");
+                if (validate(gridPane, author, "Autor")) {
+                    System.out.println("*************************ValidaAutor");
                     return;
-                }
-                if (modelo.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a modelo");
+                };
+                if (validate(gridPane, genre, "Genero")) {
                     return;
-                }
-                if (codigo.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a codigo");
+                };
+                if (validate(gridPane, publisher, "Publicadora")) {
                     return;
-                }
-                /*
-                javafxapplicationproyecto_final.model.Generador Generador = new javafxapplicationproyecto_final.model.Generador(1,fabricante.getText(),modelo.getText(),codigo.getText());    
-                gc.addGenerador(Generador);
-                showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Se creo  el generador" + modelo.getText() + " de " + fabricante.getText());
-                System.out.println(gc.lista_generadores);
+                };
+                if (validate(gridPane, title, "Titulo")) {
+                    return;
+                };
+                if (validate(gridPane, numero, "Numero")) {
+                    return;
+                };
+
                 
-                cargarListaGeneradores( gridPane);
-                 */
+                try {
+                    Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), numero.getText());
+                    //(fabricante.getText(),modelo.getText(),codigo.getText());
+                    /*
+                    gc.addGenerador(Generador);
+                    showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Se creo  el generador" + modelo.getText() + " de " + fabricante.getText());
+                    System.out.println(gc.lista_generadores);
+                    
+                    cargarListaGeneradores( gridPane);
+                    /**/
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
-        cargarListaGeneradores(gridPane);
+        int posicion_tabla = 7;
+        cargarListaGeneradores(gridPane, posicion_tabla);
     }
 
-    private void cargarListaGeneradores(GridPane gridPane) {
-        Label GeneradorLabel = new Label("Generadores : ");
-        gridPane.add(GeneradorLabel, 0, 5);
+    private void cargarListaGeneradores(GridPane gridPane, int posicionTabla) {
+        Label GeneradorLabel = new Label("Generadores************************************** : ");
+        gridPane.add(GeneradorLabel, 0, posicionTabla);
 
         /*
                 ObservableList<javafxapplicationproyecto_final.model.Generador> observableList = FXCollections.observableList( gc.lista_generadores());
