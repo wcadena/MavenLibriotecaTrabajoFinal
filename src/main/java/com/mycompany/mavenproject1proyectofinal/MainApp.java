@@ -1,5 +1,6 @@
 package com.mycompany.mavenproject1proyectofinal;
 
+import Controller.LibroController;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,9 +37,10 @@ public class MainApp extends Application {
         primaryStage.setTitle("Biblioteca");
 
         // Create the registration form grid pane
-        GridPane gridPane = createRegistrationGenerador();
+        this.gridPane = createRegistrationGenerador();
         // Add UI controls to the registration form grid pane
-        addUIControls(gridPane);
+        biblioteca = new LibroController();
+        addUIControls();
         // Create a scene with registration form grid pane as the root node
         Scene scene = new Scene(gridPane, 800, 500);
         // Set the scene in primary stage	
@@ -77,18 +79,17 @@ public class MainApp extends Application {
         return gridPane;
     }
 
-    private void addInput(GridPane gridPane, TextField campo_texto, String nombre, int posicion) {
+    private void addInput( TextField campo_texto, String nombre, int posicion) {
         // Add Name Label
         Label nameLabel = new Label(nombre);
         gridPane.add(nameLabel, 0, posicion);
 
-        // Add Name Text Field
-        campo_texto = new TextField();
+        // Add Name Text Field        
         campo_texto.setPrefHeight(40);
         gridPane.add(campo_texto, 1, posicion);
     }
 
-    private boolean validate(GridPane gridPane, TextField campo_texto, String nombre) {
+    private boolean validate( TextField campo_texto, String nombre) {
         System.out.println("-------------->"+campo_texto.getText());
         if (campo_texto.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a " + nombre + ".");
@@ -96,8 +97,10 @@ public class MainApp extends Application {
         }
         return false;
     }
-
-    private void addUIControls(final GridPane gridPane) {
+    private GridPane gridPane;
+    private LibroController biblioteca;
+    private Libros libro_actual;
+    private void addUIControls() {
         // Add Header
         Label headerLabel = new Label("Registration Generator");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -107,15 +110,15 @@ public class MainApp extends Application {
 
         // Add campos
         final TextField author = new TextField();
-        this.addInput(gridPane, author, "Autor", 1);
+        this.addInput( author, "Autor", 1);
         final TextField genre = new TextField();
-        this.addInput(gridPane, genre, "Genero", 2);
+        this.addInput( genre, "Genero", 2);
         final TextField publisher = new TextField();
-        this.addInput(gridPane, publisher, "Publicadora", 3);
+        this.addInput( publisher, "Publicadora", 3);
         final TextField title = new TextField();
-        this.addInput(gridPane, title, "Titulo", 4);
+        this.addInput( title, "Titulo", 4);
         final TextField numero = new TextField();
-        this.addInput(gridPane, numero, "Numero", 5);
+        this.addInput( numero, "Numero", 5);
 
         int posicion_boton = 6;
         // Add Submit Button
@@ -126,24 +129,24 @@ public class MainApp extends Application {
         gridPane.add(submitButton, 0, posicion_boton, 2, 1);
         GridPane.setHalignment(submitButton, HPos.CENTER);
         GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
-
+        final int posicion_tabla = 7;
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (validate(gridPane, author, "Autor")) {
+                if (validate( author, "Autor")) {
                     System.out.println("*************************ValidaAutor");
                     return;
                 };
-                if (validate(gridPane, genre, "Genero")) {
+                if (validate( genre, "Genero")) {
                     return;
                 };
-                if (validate(gridPane, publisher, "Publicadora")) {
+                if (validate( publisher, "Publicadora")) {
                     return;
                 };
-                if (validate(gridPane, title, "Titulo")) {
+                if (validate( title, "Titulo")) {
                     return;
                 };
-                if (validate(gridPane, numero, "Numero")) {
+                if (validate(numero, "Numero")) {
                     return;
                 };
 
@@ -151,40 +154,41 @@ public class MainApp extends Application {
                 try {
                     Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), numero.getText());
                     //(fabricante.getText(),modelo.getText(),codigo.getText());
-                    /*
-                    gc.addGenerador(Generador);
-                    showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Se creo  el generador" + modelo.getText() + " de " + fabricante.getText());
-                    System.out.println(gc.lista_generadores);
                     
-                    cargarListaGeneradores( gridPane);
+                    biblioteca.addLibro(Generador);
+                    showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Se creo  el libro" + title.getText() + " de " + author.getText());
+                    //System.out.println(gc.lista_generadores);
+                    
+                    cargarListaGeneradores( posicion_tabla);
                     /**/
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
-        int posicion_tabla = 7;
-        cargarListaGeneradores(gridPane, posicion_tabla);
+        
+        cargarListaGeneradores( posicion_tabla);
     }
 
-    private void cargarListaGeneradores(GridPane gridPane, int posicionTabla) {
+    private void cargarListaGeneradores(int posicionTabla) {
         Label GeneradorLabel = new Label("Generadores************************************** : ");
         gridPane.add(GeneradorLabel, 0, posicionTabla);
 
-        /*
-                ObservableList<javafxapplicationproyecto_final.model.Generador> observableList = FXCollections.observableList( gc.lista_generadores());
-                ListView<javafxapplicationproyecto_final.model.Generador> itemsz = new ListView<javafxapplicationproyecto_final.model.Generador>(observableList);
-                itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<javafxapplicationproyecto_final.model.Generador>() {
-                    @Override
-                    public void changed(ObservableValue<? extends javafxapplicationproyecto_final.model.Generador> observable, javafxapplicationproyecto_final.model.Generador oldValue, javafxapplicationproyecto_final.model.Generador newValue) {
-                        System.out.println("--->"+observable.getValue().getCódigo());                        
-                        generador_actual = observable.getValue();
+        
+                ObservableList<Libros> observableList = FXCollections.observableList( biblioteca.getBiblioteca());
+                ListView<Libros> itemsz = new ListView<Libros>(observableList);
+                itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Libros>() {
+                    
+            @Override
+            public void changed(ObservableValue<? extends Libros> observable, Libros oldValue, Libros newValue) {
+                 System.out.println("--->"+observable.getValue().getTitle());                        
+                        libro_actual = observable.getValue();
                         gridPane.getChildren().clear();
                         addUIControlsParams(gridPane);//se vuelve a cargar la pantalla de generadores
-                    }
+            }
                 });
-                gridPane.add(itemsz, 1, 5);
-         */
+                gridPane.add(itemsz, 1, posicionTabla+1);
+         /**/
     }
 
     private void addUIControlsParams(final GridPane gridPane) {
@@ -305,7 +309,7 @@ public class MainApp extends Application {
             @Override
             public void handle(ActionEvent event) {
                 gridPane.getChildren().clear();// para volver a lista de generadores
-                addUIControls(gridPane);
+                addUIControls();
             }
         });
         // Add Calcula Button
