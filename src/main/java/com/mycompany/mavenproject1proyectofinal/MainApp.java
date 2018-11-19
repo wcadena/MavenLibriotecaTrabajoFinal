@@ -4,6 +4,7 @@ import Controller.LibroController;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -329,7 +330,7 @@ public class MainApp extends Application {
         Label GeneradorLabel = new Label("Biblioteca : ");
         gridPane.add(GeneradorLabel, 0, posicionTabla+1);
 
-        
+        Collections.sort(libros);//para ordenar segun titulo
                 ObservableList<Libros> observableList = FXCollections.observableList(libros);
                 ListView<Libros> itemsz = new ListView<Libros>(observableList);
                 itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Libros>() {

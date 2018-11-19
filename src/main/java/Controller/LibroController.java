@@ -62,7 +62,7 @@ public class LibroController {
         List<Libros> libtot = this.getBiblioteca();
         for (int i = 0; i < libtot.size(); i++) {
             Libros auxLib = libtot.get(i);
-            if(auxLib.getNumero().equals(Numero_revista) ){//ve si cumple el test numero                
+            if(auxLib.getNumero().equals(Numero_revista) || Numero_revista.equals("*") ){//ve si cumple el test numero                
                 if(meses.size() == 0){
                    lib.add(auxLib); 
                 }
@@ -120,7 +120,7 @@ public class LibroController {
             l.setGenre(faker.book().genre());
             l.setPublisher(faker.book().publisher());
             l.setId(i);
-            l.setNumero(""+faker.idNumber().hashCode());
+            l.setNumero(""+(int)(Math.random()*1000));
             Date dNow = new Date();
 
             String date_s = "1985-01-18 00:00:00.0";

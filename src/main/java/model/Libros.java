@@ -15,13 +15,14 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**
  *
  * @author wcade
  */
-public class Libros {
+public class Libros implements Comparable<Libros> {
 
     private int id;
     private String author;
@@ -188,7 +189,42 @@ public class Libros {
     public String toString() {
         return "Libros{" + "id=" + id + ", author=" + author + ", genre=" + genre + ", publisher=" + publisher + ", title=" + title + ", numero=" + numero + ", created_at=" + created_at + ", update_at=" + update_at + ", delete_at=" + delete_at + ", mes=" + mes + '}';
     }
-    
-    
-    
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.author);
+        hash = 59 * hash + Objects.hashCode(this.title);
+        hash = 59 * hash + Objects.hashCode(this.numero);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Libros other = (Libros) obj;
+        if (!Objects.equals(this.author, other.author)) {
+            return false;
+        }
+        if (!Objects.equals(this.title, other.title)) {
+            return false;
+        }
+        if (!Objects.equals(this.numero, other.numero)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int compareTo(Libros o) {
+        return this.numero.compareTo(o.numero);        
+    }            
 }
