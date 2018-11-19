@@ -6,6 +6,7 @@
 package model;
 
 import excepcion.ExcepcionAnioInvalido;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class Mes {
     private List<Libros> biblioteca_mes;
 
     public Mes(int anio) throws ExcepcionAnioInvalido {
+        biblioteca_mes = new ArrayList();
         if(anio == 0){
             throw new ExcepcionAnioInvalido("Anio Fuera de intervalo");
         }

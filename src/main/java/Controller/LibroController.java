@@ -46,13 +46,35 @@ public class LibroController {
     }
     
     public void addLibro(Libros generador){
-        generador.getMes().addLibro(generador);
+        Mes auxMes= generador.getMes();
+        System.out.println("===+++++++++++++++++++>"+auxMes);
+        auxMes.addLibro(generador);
         this.biblioteca.add(generador);
     }
 
     
     public List<Libros> getBiblioteca() {
         return biblioteca;
+    }
+    
+    public List<Libros> filtrar(List<Mes> meses,String Numero_revista){
+        List<Libros> lib = new ArrayList<Libros>();
+        List<Libros> libtot = this.getBiblioteca();
+        for (int i = 0; i < libtot.size(); i++) {
+            Libros auxLib = libtot.get(i);
+            if(auxLib.getNumero().equals(Numero_revista) ){//ve si cumple el test numero                
+                if(meses.size() == 0){
+                   lib.add(auxLib); 
+                }
+                for (int j = 0; j < meses.size(); j++) {//ve si es del tipo mes seleccionado
+                    Mes auxMes = meses.get(j);
+                    if(auxLib.getMes().getMes() == auxMes.getMes()){
+                        lib.add(auxLib);
+                    }
+                }
+            }            
+        }   
+        return libtot;
     }
 
     public void setBiblioteca(ArrayList<Libros> biblioteca) {

@@ -172,7 +172,7 @@ public class MainApp extends Application {
             @Override
             public void handle(ActionEvent event) {
                 gridPane.getChildren().clear();
-                cargarListaGeneradores( 2, biblioteca.getBiblioteca());
+                reporteTotal_1();
             }
         });
         
@@ -205,7 +205,7 @@ public class MainApp extends Application {
         this.addInput( title, "Titulo", 4);
         final TextField numero = new TextField();
         this.addInput( numero, "Numero", 5);
-        this.cargarAnios(gridPane,6);
+        this.cargarAnios(gridPane,6,"");
         
         int posicion_boton = 9;
         // Add Submit Button
@@ -255,8 +255,8 @@ public class MainApp extends Application {
         cargarListaGeneradores( posicion_tabla, biblioteca.getBiblioteca());
     }
     
-    private void cargarAnios(final GridPane gridPane, final int posicion) {
-        Label GeneradorLabel = new Label("Anio : ");
+    private void cargarAnios(final GridPane gridPane, final int posicion,final String titulo) {
+        Label GeneradorLabel = new Label("Anio "+titulo+": ");
         gridPane.add(GeneradorLabel, 0, posicion);
         
          List<Anio> anios = this.biblioteca.getAnios();                 
@@ -267,14 +267,14 @@ public class MainApp extends Application {
              @Override
              public void changed(ObservableValue<? extends Anio> observable, Anio oldValue, Anio newValue) {
                  anio_actual = observable.getValue();
-                 cargarMes(gridPane,anio_actual,posicion+1);
+                 cargarMes(gridPane,anio_actual,posicion+1,titulo);
              }
         });
         gridPane.add(itemsz, 1, posicion);
     }
     
-    private void cargarMes(GridPane gridPane, Anio anio,int posicion) {
-        Label GeneradorLabel = new Label("Mes : ");
+    private void cargarMes(GridPane gridPane, Anio anio,int posicion,String titulo) {
+        Label GeneradorLabel = new Label("Mes "+titulo+": ");
         gridPane.add(GeneradorLabel, 0, posicion);
         
          List<Mes> mess = anio.getMess();                 
@@ -285,6 +285,41 @@ public class MainApp extends Application {
             @Override
             public void changed(ObservableValue<? extends Mes> observable, Mes oldValue, Mes newValue) {
                 mes_actual = observable.getValue();
+            }
+        });
+        gridPane.add(itemsz, 1, posicion);
+    }
+    private Anio anio_actual2;
+    private void cargarAnios2(final GridPane gridPane, final int posicion, final String titulo) {
+        Label GeneradorLabel = new Label("Anio "+titulo+": ");
+        gridPane.add(GeneradorLabel, 0, posicion);
+        
+         List<Anio> anios = this.biblioteca.getAnios();                 
+        
+        ObservableList<Anio> observableList = FXCollections.observableList(anios);
+        ListView<Anio> itemsz = new ListView<Anio>(observableList);
+        itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Anio>() {
+             @Override
+             public void changed(ObservableValue<? extends Anio> observable, Anio oldValue, Anio newValue) {
+                 anio_actual2 = observable.getValue();
+                 cargarMes2(gridPane,anio_actual,posicion+1,titulo);
+             }
+        });
+        gridPane.add(itemsz, 1, posicion);
+    }
+    private Mes mes_actual2;
+    private void cargarMes2(GridPane gridPane, Anio anio,int posicion, String titulo) {
+        Label GeneradorLabel = new Label("Mes "+titulo+": ");
+        gridPane.add(GeneradorLabel, 0, posicion);
+        
+         List<Mes> mess = anio.getMess();                 
+        
+        ObservableList<Mes> observableList = FXCollections.observableList(mess);
+        ListView<Mes> itemsz = new ListView<Mes>(observableList);
+        itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Mes>() {             
+            @Override
+            public void changed(ObservableValue<? extends Mes> observable, Mes oldValue, Mes newValue) {
+                mes_actual2 = observable.getValue();
             }
         });
         gridPane.add(itemsz, 1, posicion);
@@ -310,13 +345,32 @@ public class MainApp extends Application {
                 gridPane.add(itemsz, 1, posicionTabla+1);
          /**/
     }
-    private void ReporteTotal(){
-        List<Libros> lib = new ArrayList<Libros>();
-        List<Libros> libtot = biblioteca.getBiblioteca();
-        for (int i = 0; i < libtot.size(); i++) {
-            System.out.println(libtot.get(i));
-            lib.add(libtot.get(i));
-        }
+    
+    private void reporteTotal_1(){
+            this.cargarAnios(gridPane,1,"Inicio");
+            this.cargarAnios(gridPane,3,"Fin");
+            
+            int posicion_boton = 5;
+        // Add Submit Button
+        Button submitButton = new Button("Buscar");
+        submitButton.setPrefHeight(40);
+        submitButton.setDefaultButton(true);
+        submitButton.setPrefWidth(100);
+        gridPane.add(submitButton, 0, posicion_boton, 2, 1);
+        GridPane.setHalignment(submitButton, HPos.CENTER);
+        GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
+        final int posicion_tabla = 7;
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                cargarListaGeneradores(posicion_tabla, biblioteca.getBiblioteca());
+
+            }
+        });
+        
+        cargarListaGeneradores( posicion_tabla, biblioteca.getBiblioteca());
+            
     }
 
     private void addUIControlsParams(final GridPane gridPane,Libros libro) {
