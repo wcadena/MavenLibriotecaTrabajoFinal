@@ -1,6 +1,7 @@
 package com.mycompany.mavenproject1proyectofinal;
 
 import Controller.LibroController;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +26,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
 import model.Anio;
 import model.Libros;
 import model.Mes;
@@ -32,6 +41,8 @@ import model.Mes;
 public class MainApp extends Application {
 
     private int id_libros;
+    MenuBar menuBar = new MenuBar();
+    
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -47,9 +58,13 @@ public class MainApp extends Application {
         
         biblioteca.llenarAnios();
         biblioteca.LLenarLibreria();
-        addUIControls();
+        //addUIControls();
+        this.addMenu();
+        VBox root = new VBox(menuBar,gridPane);
+    
+
         // Create a scene with registration form grid pane as the root node
-        Scene scene = new Scene(gridPane, 800, 500);
+        Scene scene = new Scene(root, 800, 500);
         // Set the scene in primary stage	
         primaryStage.setScene(scene);
 
@@ -97,7 +112,7 @@ public class MainApp extends Application {
     }
 
     private boolean validate( TextField campo_texto, String nombre) {
-        System.out.println("-------------->"+campo_texto.getText());
+        
         if (campo_texto.getText().isEmpty()) {
             showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a " + nombre + ".");
             return true;
@@ -109,6 +124,35 @@ public class MainApp extends Application {
     private Libros libro_actual;
     private Anio anio_actual;//es el q se elige en campo anios
     private Mes mes_actual;//es el q se elige en campo anios
+    
+    private void addMenu(){
+        //Where the GUI is created:
+        
+        Menu menu = new Menu("Menu");
+        MenuItem menuItem1 = new MenuItem("Lista de Libros");
+        MenuItem menuItem2 = new MenuItem("Nuevo");
+
+        menu.getItems().add(menuItem1);
+        menu.getItems().add(menuItem2);
+        
+        menuItem1.setOnAction(new EventHandler<ActionEvent>() {            
+            @Override
+            public void handle(ActionEvent event) {
+                gridPane.getChildren().clear();
+                cargarListaGeneradores( 2);
+            }
+        });
+        
+        menuItem2.setOnAction(new EventHandler<ActionEvent>() {            
+            @Override
+            public void handle(ActionEvent event) {
+                gridPane.getChildren().clear();
+                addUIControls() ;
+            }
+        });
+        
+        menuBar.getMenus().add(menu);
+    }
     private void addUIControls() {
         // Add Header
         Label headerLabel = new Label("Registration Generator");
