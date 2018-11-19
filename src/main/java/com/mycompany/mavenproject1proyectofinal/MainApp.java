@@ -140,7 +140,7 @@ public class MainApp extends Application {
             @Override
             public void handle(ActionEvent event) {
                 gridPane.getChildren().clear();
-                cargarListaGeneradores( 2);
+                cargarListaGeneradores( 2, biblioteca.getBiblioteca());
             }
         });
         
@@ -172,7 +172,7 @@ public class MainApp extends Application {
             @Override
             public void handle(ActionEvent event) {
                 gridPane.getChildren().clear();
-                cargarListaGeneradores( 2);
+                cargarListaGeneradores( 2, biblioteca.getBiblioteca());
             }
         });
         
@@ -188,7 +188,7 @@ public class MainApp extends Application {
     }
     private void addUIControls() {
         // Add Header
-        Label headerLabel = new Label("Registration Generator");
+        Label headerLabel = new Label("Registration Libro");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         gridPane.add(headerLabel, 0, 0, 2, 1);
         GridPane.setHalignment(headerLabel, HPos.CENTER);
@@ -244,7 +244,7 @@ public class MainApp extends Application {
                     showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Se creo  el libro" + title.getText() + " de " + author.getText());
                     //System.out.println(gc.lista_generadores);
                     
-                    cargarListaGeneradores( posicion_tabla);
+                    cargarListaGeneradores( posicion_tabla, biblioteca.getBiblioteca() );
                     /**/
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -252,7 +252,7 @@ public class MainApp extends Application {
             }
         });
         
-        cargarListaGeneradores( posicion_tabla);
+        cargarListaGeneradores( posicion_tabla, biblioteca.getBiblioteca());
     }
     
     private void cargarAnios(final GridPane gridPane, final int posicion) {
@@ -290,12 +290,12 @@ public class MainApp extends Application {
         gridPane.add(itemsz, 1, posicion);
     }
 
-    private void cargarListaGeneradores(int posicionTabla) {
+    private void cargarListaGeneradores(int posicionTabla,List<Libros> libros ) {
         Label GeneradorLabel = new Label("Biblioteca : ");
         gridPane.add(GeneradorLabel, 0, posicionTabla+1);
 
         
-                ObservableList<Libros> observableList = FXCollections.observableList( biblioteca.getBiblioteca());
+                ObservableList<Libros> observableList = FXCollections.observableList(libros);
                 ListView<Libros> itemsz = new ListView<Libros>(observableList);
                 itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Libros>() {
                     
@@ -304,60 +304,41 @@ public class MainApp extends Application {
                  //System.out.println("--->"+observable.getValue().getTitle());                        
                         libro_actual = observable.getValue();
                         gridPane.getChildren().clear();
-                        addUIControlsParams(gridPane);//se vuelve a cargar la pantalla de generadores
+                        addUIControlsParams(gridPane,libro_actual);//se vuelve a cargar la pantalla de generadores
             }
                 });
                 gridPane.add(itemsz, 1, posicionTabla+1);
          /**/
     }
 
-    private void addUIControlsParams(final GridPane gridPane) {
+    private void addUIControlsParams(final GridPane gridPane,Libros libro) {
         // Add Header
-        Label headerLabel = new Label("Registration Params");
+        Label headerLabel = new Label("Detalle Libro");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
         gridPane.add(headerLabel, 0, 0, 2, 1);
         GridPane.setHalignment(headerLabel, HPos.CENTER);
         GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
 
         // Add Name Label
-        Label nameLabel = new Label("Nombre : ");
-        gridPane.add(nameLabel, 0, 1);
-
-        // Add Name Text Field
-        final TextField nombre = new TextField();
-        nombre.setPrefHeight(40);
-        gridPane.add(nombre, 1, 1);
-
-        // Add Email Label
-        Label emailLabel = new Label("rango_minimo : ");
-        gridPane.add(emailLabel, 0, 2);
-
-        // Add Email Text Field
-        final TextField rango_minimo = new TextField();
-        rango_minimo.setPrefHeight(40);
-        gridPane.add(rango_minimo, 1, 2);
-
-        // Add Password Label
-        Label passwordLabel = new Label("Rango_maximo : ");
-        gridPane.add(passwordLabel, 0, 3);
-
-        // Add Password Field
-        final TextField rango_maximo = new TextField();
-        rango_maximo.setPrefHeight(40);
-        gridPane.add(rango_maximo, 1, 3);
-        ///////////////////////////////////////////////////////
-        // Add Password Label
-        Label valor_actualLabel = new Label("Valor_actual : ");
-        gridPane.add(valor_actualLabel, 0, 4);
-
-        // Add Password Field
-        final TextField valor_actual = new TextField();
-        valor_actual.setPrefHeight(40);
-        gridPane.add(valor_actual, 1, 4);
+        final TextField author = new TextField();
+        this.addInput( author, "Autor", 1);
+        author.setText(libro.getAuthor());
+        final TextField genre = new TextField();
+        this.addInput( genre, "Genero", 2);
+        genre.setText(libro.getGenre());
+        final TextField publisher = new TextField();
+        this.addInput( publisher, "Publicadora", 3);
+        publisher.setText(libro.getPublisher());
+        final TextField title = new TextField();
+        this.addInput( title, "Titulo", 4);
+        title.setText(libro.getTitle());
+        final TextField numero = new TextField();
+        this.addInput( numero, "Numero", 5);
+        numero.setText(libro.getNumero());
         ////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////
-        cargarAlarmas(gridPane);
+        //cargarAlarmas(gridPane);
         ////////////////////////////////////////////////////////
 
         // Add Submit Button
@@ -372,34 +353,7 @@ public class MainApp extends Application {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (nombre.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a nombre");
-                    return;
-                }
-                if (rango_minimo.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a rango_minimo");
-                    return;
-                }
-                if (rango_maximo.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a rango_maximo");
-                    return;
-                }
-                if (valor_actual.getText().isEmpty()) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a valor_actual");
-                    return;
-                }
-                if (!isInteger(rango_minimo.getText())) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Debe ser un numero rango_minimo");
-                    return;
-                }
-                if (!isInteger(rango_maximo.getText())) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Debe ser un numero rango_maximo");
-                    return;
-                }
-                if (!isInteger(valor_actual.getText())) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Debe ser un numero valor_actual");
-                    return;
-                }
+                showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Mensage!", "No es parte de Tarea");
                 /*
                  if(alarma_actual == null) {
                     showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Debe elegir Alarma");
@@ -416,7 +370,7 @@ public class MainApp extends Application {
                  */
             }
         });
-        cargarlistaParametros(gridPane);
+        
         // Add regresa Button
         Button regresaButton = new Button("< Regresa");
         regresaButton.setPrefHeight(40);
@@ -433,13 +387,13 @@ public class MainApp extends Application {
             }
         });
         // Add Calcula Button
-        Button CalculaButton = new Button("Calcula");
+        /*Button CalculaButton = new Button("Calcula");
         CalculaButton.setPrefHeight(40);
         CalculaButton.setDefaultButton(true);
         CalculaButton.setPrefWidth(100);
         gridPane.add(CalculaButton, 2, 6);
         GridPane.setHalignment(CalculaButton, HPos.CENTER);
-        GridPane.setMargin(CalculaButton, new Insets(20, 0, 20, 0));
+        GridPane.setMargin(CalculaButton, new Insets(20, 0, 20, 0));*/
         /*
         CalculaButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -447,49 +401,6 @@ public class MainApp extends Application {
                 showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Calculo Realizado!", "El calculo de Media es:"+Parametro_actual.alteracionMedia());                        
             }
         });
-         */
-    }
-
-    private void cargarlistaParametros(GridPane gridPane) {
-        Label GeneradorLabel = new Label("Generadores : ");
-        gridPane.add(GeneradorLabel, 0, 7);
-
-        /*
-                ObservableList<ParametroGenerador> observableList = FXCollections.observableList( generador_actual.getParametros());
-                ListView<ParametroGenerador> itemsz = new ListView<ParametroGenerador>(observableList);
-                itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ParametroGenerador>() {
-                    
-                    @Override
-                    public void changed(ObservableValue<? extends ParametroGenerador> observable, ParametroGenerador oldValue, ParametroGenerador newValue) {
-                        System.out.println("--->"+observable.getValue());                        
-                        Parametro_actual = observable.getValue();
-                        Parametro_actual.generarEventoParametro();
-                        showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Iteraccion Creada!", "Se creo una iteraccion de generador");                        
-                        if(Parametro_actual.getValor_actual()<= Parametro_actual.getRango_minimo() ||
-                               Parametro_actual.getValor_actual()>= Parametro_actual.getRango_maximo() ){
-                            showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Alarma ", "Evento fuera de rango: "+Parametro_actual.getValor_actual());                        
-                        }
-                        cargarlistaParametros(gridPane);
-                    }
-                });
-                gridPane.add(itemsz, 1, 7);
-         */
-    }
-
-    private void cargarAlarmas(GridPane gridPane) {
-        Label GeneradorLabel = new Label("Alarmas : ");
-        gridPane.add(GeneradorLabel, 0, 5);
-
-        /*
-        ObservableList<Alarma> observableList = FXCollections.observableList(listaAlarmas);
-        ListView<Alarma> itemsz = new ListView<Alarma>(observableList);
-        itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Alarma>() {
-            @Override
-            public void changed(ObservableValue<? extends Alarma> observable, Alarma oldValue, Alarma newValue) {
-                alarma_actual = observable.getValue();
-            }
-        });
-        gridPane.add(itemsz, 1, 5);
          */
     }
 
