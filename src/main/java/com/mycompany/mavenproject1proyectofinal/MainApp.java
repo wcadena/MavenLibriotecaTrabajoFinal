@@ -310,6 +310,14 @@ public class MainApp extends Application {
                 gridPane.add(itemsz, 1, posicionTabla+1);
          /**/
     }
+    private void ReporteTotal(){
+        List<Libros> lib = new ArrayList<Libros>();
+        List<Libros> libtot = biblioteca.getBiblioteca();
+        for (int i = 0; i < libtot.size(); i++) {
+            System.out.println(libtot.get(i));
+            lib.add(libtot.get(i));
+        }
+    }
 
     private void addUIControlsParams(final GridPane gridPane,Libros libro) {
         // Add Header
