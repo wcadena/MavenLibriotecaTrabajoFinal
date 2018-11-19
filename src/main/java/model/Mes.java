@@ -6,6 +6,7 @@
 package model;
 
 import excepcion.ExcepcionAnioInvalido;
+import java.util.List;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Mes {
     private int anio;
     private int mes;
     private String nombre;
+    private List<Libros> biblioteca_mes;
 
     public Mes(int anio) throws ExcepcionAnioInvalido {
         if(anio == 0){
@@ -22,7 +24,18 @@ public class Mes {
         }
         this.anio = anio;
     }
-   
+
+    public List<Libros> getBiblioteca_mes() {
+        return biblioteca_mes;
+    }
+
+    public void setBiblioteca_mes(List<Libros> biblioteca_mes) {
+        this.biblioteca_mes = biblioteca_mes;
+    }
+   public void addLibro(Libros generador){
+        
+        this.biblioteca_mes.add(generador);
+    }
 
     public int getMes() {
         return mes;

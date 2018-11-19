@@ -46,6 +46,7 @@ public class LibroController {
     }
     
     public void addLibro(Libros generador){
+        generador.getMes().addLibro(generador);
         this.biblioteca.add(generador);
     }
 
