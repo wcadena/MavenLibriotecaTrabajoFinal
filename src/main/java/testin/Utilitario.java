@@ -11,7 +11,7 @@ import java.util.Random;
  *
  * @author wcade
  */
-class Utilitario {
+public class Utilitario {
     public static int randInt(int min, int max) {
         Random foo = new Random();
         int randomNumber = foo.nextInt(max - min) + min;

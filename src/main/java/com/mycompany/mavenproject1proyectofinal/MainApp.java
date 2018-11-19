@@ -25,7 +25,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import model.Anio;
 import model.Libros;
+import model.Mes;
 
 public class MainApp extends Application {
 
@@ -39,7 +41,12 @@ public class MainApp extends Application {
         // Create the registration form grid pane
         this.gridPane = createRegistrationGenerador();
         // Add UI controls to the registration form grid pane
+        (new Libros()).setId_secuencial(1);//set 1 id libros
+        
         biblioteca = new LibroController();
+        
+        biblioteca.llenarAnios();
+        biblioteca.LLenarLibreria();
         addUIControls();
         // Create a scene with registration form grid pane as the root node
         Scene scene = new Scene(gridPane, 800, 500);
@@ -100,6 +107,8 @@ public class MainApp extends Application {
     private GridPane gridPane;
     private LibroController biblioteca;
     private Libros libro_actual;
+    private Anio anio_actual;//es el q se elige en campo anios
+    private Mes mes_actual;//es el q se elige en campo anios
     private void addUIControls() {
         // Add Header
         Label headerLabel = new Label("Registration Generator");
@@ -119,8 +128,9 @@ public class MainApp extends Application {
         this.addInput( title, "Titulo", 4);
         final TextField numero = new TextField();
         this.addInput( numero, "Numero", 5);
-
-        int posicion_boton = 6;
+        this.cargarAnios(gridPane,6);
+        
+        int posicion_boton = 9;
         // Add Submit Button
         Button submitButton = new Button("Crear");
         submitButton.setPrefHeight(40);
@@ -133,8 +143,7 @@ public class MainApp extends Application {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (validate( author, "Autor")) {
-                    System.out.println("*************************ValidaAutor");
+                if (validate( author, "Autor")) {                    
                     return;
                 };
                 if (validate( genre, "Genero")) {
@@ -149,10 +158,9 @@ public class MainApp extends Application {
                 if (validate(numero, "Numero")) {
                     return;
                 };
-
                 
                 try {
-                    Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), numero.getText());
+                    Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), numero.getText(),mes_actual);
                     //(fabricante.getText(),modelo.getText(),codigo.getText());
                     
                     biblioteca.addLibro(Generador);
@@ -169,10 +177,45 @@ public class MainApp extends Application {
         
         cargarListaGeneradores( posicion_tabla);
     }
+    
+    private void cargarAnios(final GridPane gridPane, final int posicion) {
+        Label GeneradorLabel = new Label("Anio : ");
+        gridPane.add(GeneradorLabel, 0, posicion);
+        
+         List<Anio> anios = this.biblioteca.getAnios();                 
+        
+        ObservableList<Anio> observableList = FXCollections.observableList(anios);
+        ListView<Anio> itemsz = new ListView<Anio>(observableList);
+        itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Anio>() {
+             @Override
+             public void changed(ObservableValue<? extends Anio> observable, Anio oldValue, Anio newValue) {
+                 anio_actual = observable.getValue();
+                 cargarMes(gridPane,anio_actual,posicion+1);
+             }
+        });
+        gridPane.add(itemsz, 1, posicion);
+    }
+    
+    private void cargarMes(GridPane gridPane, Anio anio,int posicion) {
+        Label GeneradorLabel = new Label("Mes : ");
+        gridPane.add(GeneradorLabel, 0, posicion);
+        
+         List<Mes> mess = anio.getMess();                 
+        
+        ObservableList<Mes> observableList = FXCollections.observableList(mess);
+        ListView<Mes> itemsz = new ListView<Mes>(observableList);
+        itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Mes>() {             
+            @Override
+            public void changed(ObservableValue<? extends Mes> observable, Mes oldValue, Mes newValue) {
+                mes_actual = observable.getValue();
+            }
+        });
+        gridPane.add(itemsz, 1, posicion);
+    }
 
     private void cargarListaGeneradores(int posicionTabla) {
-        Label GeneradorLabel = new Label("Generadores************************************** : ");
-        gridPane.add(GeneradorLabel, 0, posicionTabla);
+        Label GeneradorLabel = new Label("Biblioteca : ");
+        gridPane.add(GeneradorLabel, 0, posicionTabla+1);
 
         
                 ObservableList<Libros> observableList = FXCollections.observableList( biblioteca.getBiblioteca());
@@ -181,7 +224,7 @@ public class MainApp extends Application {
                     
             @Override
             public void changed(ObservableValue<? extends Libros> observable, Libros oldValue, Libros newValue) {
-                 System.out.println("--->"+observable.getValue().getTitle());                        
+                 //System.out.println("--->"+observable.getValue().getTitle());                        
                         libro_actual = observable.getValue();
                         gridPane.getChildren().clear();
                         addUIControlsParams(gridPane);//se vuelve a cargar la pantalla de generadores

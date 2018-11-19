@@ -5,13 +5,23 @@
  */
 package model;
 
+import excepcion.ExcepcionAnioInvalido;
+
 /**
  *
  * @author wcade
  */
 public class Mes {
+    private int anio;
     private int mes;
     private String nombre;
+
+    public Mes(int anio) throws ExcepcionAnioInvalido {
+        if(anio == 0){
+            throw new ExcepcionAnioInvalido("Anio Fuera de intervalo");
+        }
+        this.anio = anio;
+    }
    
 
     public int getMes() {
@@ -72,11 +82,12 @@ public class Mes {
         this.nombre = nombre;
     }
 
-    
-
     @Override
     public String toString() {
-        return "Mes{" + "mes=" + mes + ", nombre=" + nombre + "" + '}';
+        return "Mes{" + "Anio=" + anio + ", Mes=" + mes + ", nombre=" + nombre + '}';
     }
+
+    
+
     
 }

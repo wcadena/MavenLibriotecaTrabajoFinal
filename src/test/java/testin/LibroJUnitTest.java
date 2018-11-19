@@ -6,6 +6,7 @@
 package testin;
 
 import com.github.javafaker.Faker;
+import excepcion.ExcepcionAnioInvalido;
 import java.io.FileNotFoundException;
 import static java.lang.ProcessBuilder.Redirect.from;
 import java.text.ParseException;
@@ -54,7 +55,7 @@ public class LibroJUnitTest extends TestCase {
 
     }
 
-    public void testAnios() {
+    public void testAnios() throws ExcepcionAnioInvalido {
 
         ArrayList<Anio> as;
         as = new ArrayList();
@@ -65,7 +66,7 @@ public class LibroJUnitTest extends TestCase {
             ArrayList<Mes> ms;
             ms = new ArrayList();
             for (int j = 1; j <= 12; j++) {
-                Mes m = new Mes();
+                Mes m = new Mes(a.getAnio());
                 m.setMes(j);
 
                 ms.add(m);
@@ -76,7 +77,7 @@ public class LibroJUnitTest extends TestCase {
         System.out.println("Test Anios--->" + as);
     }
 
-    public void testLibros() throws ParseException, FileNotFoundException {
+    public void testLibros() throws ParseException, FileNotFoundException, ExcepcionAnioInvalido {
 
         ArrayList<Anio> as;
         as = new ArrayList();
@@ -87,7 +88,7 @@ public class LibroJUnitTest extends TestCase {
             ArrayList<Mes> ms;
             ms = new ArrayList();
             for (int j = 1; j <= 12; j++) {
-                Mes m = new Mes();
+                Mes m = new Mes(a.getAnio());
                 m.setMes(j);
 
                 ms.add(m);
@@ -98,7 +99,7 @@ public class LibroJUnitTest extends TestCase {
         ArrayList<Libros> ls = null;
         ls = new ArrayList();
         Faker faker = new Faker();
-        for (int i = 0; i < 200; i++) {
+        for (int i = 0; i < 2; i++) {
             Libros l = new Libros();
             l.setAuthor(faker.book().author());
             l.setTitle(faker.book().title());
