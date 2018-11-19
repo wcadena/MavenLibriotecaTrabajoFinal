@@ -60,6 +60,7 @@ public class MainApp extends Application {
         biblioteca.LLenarLibreria();
         //addUIControls();
         this.addMenu();
+        addMenuReporte();
         VBox root = new VBox(menuBar,gridPane);
     
 
@@ -152,6 +153,38 @@ public class MainApp extends Application {
         });
         
         menuBar.getMenus().add(menu);
+    }
+    private void addMenuReporte(){
+        //Where the GUI is created:
+        
+        Menu menuR = new Menu("Reportes");
+        MenuItem menuItem1 = new MenuItem("Busqueda por Mes");
+        MenuItem menuItem2 = new MenuItem("Reportes revistas por mes");
+        MenuItem menuItem3 = new MenuItem("Reportes Promedio de revistas recibidas");
+        MenuItem menuItem4 = new MenuItem("Reportes revistas por mes");
+        MenuItem menuItem5 = new MenuItem("Reportes revistas por mes - conteo");        
+        MenuItem menuItem6 = new MenuItem("Reportes revistas ordenado");        
+        
+        menuR.getItems().add(menuItem1);
+        menuR.getItems().add(menuItem2);
+        
+        menuItem1.setOnAction(new EventHandler<ActionEvent>() {            
+            @Override
+            public void handle(ActionEvent event) {
+                gridPane.getChildren().clear();
+                cargarListaGeneradores( 2);
+            }
+        });
+        
+        menuItem2.setOnAction(new EventHandler<ActionEvent>() {            
+            @Override
+            public void handle(ActionEvent event) {
+                gridPane.getChildren().clear();
+                addUIControls() ;
+            }
+        });
+        
+        menuBar.getMenus().add(menuR);
     }
     private void addUIControls() {
         // Add Header
