@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 /**
  *
@@ -54,7 +55,7 @@ public class Libros implements Comparable<Libros> {
 
     public int getId_secuencial() throws FileNotFoundException {
         File file = new File("autonumerico.txt");
-        System.out.println("======>"+file.getPath());
+        //System.out.println("======>"+file.getPath());
         Scanner scanner = new Scanner(file);
         List<Integer> integers = new ArrayList<>();
         while (scanner.hasNext()) {
@@ -103,7 +104,34 @@ public class Libros implements Comparable<Libros> {
         this.mes = mes;
     }
     
-    
+    Predicate<Libros> nameEqualsTo(final String name) {
+    return new Predicate<Libros>() {
+
+        public boolean apply(Libros dataPoint) {
+            return dataPoint.title.equals(name);
+        }
+
+        @Override
+        public boolean test(Libros t) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Predicate<Libros> and(Predicate<? super Libros> other) {
+            return Predicate.super.and(other); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Predicate<Libros> negate() {
+            return Predicate.super.negate(); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Predicate<Libros> or(Predicate<? super Libros> other) {
+            return Predicate.super.or(other); //To change body of generated methods, choose Tools | Templates.
+        }
+    };
+}
 
     public int getId() {
         return id;
@@ -226,6 +254,7 @@ public class Libros implements Comparable<Libros> {
 
     @Override
     public int compareTo(Libros o) {
-        return this.numero.compareTo(o.numero);        
+        //return this.numero.compareTo(o.numero);        
+        return this.title.compareTo(o.title);        
     }            
 }

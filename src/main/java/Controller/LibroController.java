@@ -107,7 +107,7 @@ public class LibroController {
         }
     }
     public void LLenarLibreria() throws FileNotFoundException, ParseException{
-        this.LLenarLibreria(200);
+        this.LLenarLibreria(2000);
     }
     public void LLenarLibreria( int libros) throws FileNotFoundException, ParseException{
                 

@@ -4,6 +4,7 @@ import Controller.LibroController;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,7 @@ import javax.swing.KeyStroke;
 import model.Anio;
 import model.Libros;
 import model.Mes;
+import model.UtilLibrosNumero;
 
 public class MainApp extends Application {
 
@@ -162,13 +164,14 @@ public class MainApp extends Application {
         Menu menuR = new Menu("Reportes");
         MenuItem menuItem1 = new MenuItem("Reporte de meses que no se registro compras de revistas");
         MenuItem menuItem2 = new MenuItem("Reporte por rango trimestre mostrar promedio de revistas recibidas");
-        MenuItem menuItem3 = new MenuItem("Reportes Promedio de revistas recibidas");
+        MenuItem menuItem3 = new MenuItem("Reporte de continuidad, mas meses (Mas Numeros) , soportar duplicidad de datos.");
         MenuItem menuItem4 = new MenuItem("Reportes revistas por mes");
         MenuItem menuItem5 = new MenuItem("Reportes revistas por mes - conteo");        
         MenuItem menuItem6 = new MenuItem("Reportes revistas ordenado");        
         
         menuR.getItems().add(menuItem1);
         menuR.getItems().add(menuItem2);
+        menuR.getItems().add(menuItem3);
         
         menuItem1.setOnAction(new EventHandler<ActionEvent>() {            
             @Override
@@ -183,6 +186,13 @@ public class MainApp extends Application {
             public void handle(ActionEvent event) {
                 gridPane.getChildren().clear();
                 reporteTotal_2() ;
+            }
+        });
+        menuItem3.setOnAction(new EventHandler<ActionEvent>() {            
+            @Override
+            public void handle(ActionEvent event) {
+                gridPane.getChildren().clear();
+                reporteTotal_3() ;
             }
         });
         
@@ -474,6 +484,67 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
                 r2 += "Primer\tSegundo\tTercero\tCuarta\t\n";
                 r2 += String.format( "%.2f",primTrim/3)+"\t\t" +String.format( "%.2f",secTrim/3)+ "\t\t" +
                         String.format( "%.2f",tercTrim/3)+ "\t\t" +String.format( "%.2f",cuartTrim/3)+ "\t\n";
+                textField.setText(r2);
+                
+                gridPane.add(textField, 0, posicion_tabla+1,2,4);                
+            }
+        });                            
+    }
+    private void reporteTotal_3(){
+        
+        // Add Header
+        Label headerLabel = new Label("Reporte de continuidad, mas meses (Mas Numeros) , soportar duplicidad de datos.");
+        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        gridPane.add(headerLabel, 0, 0, 2, 1);
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
+        
+        
+           
+            
+            int posicion_boton = 5;
+        // Add Submit Button
+        Button submitButton = new Button("Buscar");
+        submitButton.setPrefHeight(40);
+        submitButton.setDefaultButton(true);
+        submitButton.setPrefWidth(100);
+        gridPane.add(submitButton, 0, posicion_boton, 2, 1);
+        GridPane.setHalignment(submitButton, HPos.CENTER);
+        GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
+        final int posicion_tabla = 7;
+        
+        final List<UtilLibrosNumero> re3 = new ArrayList();
+        
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                List<Libros> aux_lib = biblioteca.getBiblioteca();
+                for (int i = 0; i < aux_lib.size(); i++) {
+                    Libros auxMes1 = aux_lib.get(i);     
+                    UtilLibrosNumero auxR3 = UtilLibrosNumero.findCustomerByid(re3, auxMes1.getTitle());
+                    System.out.println("++++++>"+auxR3);
+                    if(auxR3 != null){
+                        List<String> auxNumx1= auxR3.getNumeros();
+                        auxNumx1.add(auxMes1.getNumero());
+                        auxR3.setNumeros(auxNumx1);
+                        re3.add(auxR3);
+                    }else{
+                        UtilLibrosNumero auxR33 = new UtilLibrosNumero(auxMes1.getTitle());
+                        List<String> auxNumx12= auxR33.getNumeros();
+                        auxNumx12.add(auxMes1.getNumero());
+                        auxR33.setNumeros(auxNumx12);                        
+                        re3.add(auxR33);
+                    }
+                }          
+                System.out.println("---+++++*******----->\n"+re3);
+                TextArea textField = new TextArea();  
+                String r2 ="";
+                r2 += "\t Reporte: Por Titulo \n";
+                r2 += "Titulo\t\t\t\t\tNumero\n";
+                for (int j = 0; j < re3.size(); j++) {
+                    UtilLibrosNumero auxrep34 = re3.get(j);  
+                    r2 += auxrep34.getTitulo()+"\t\t\t\t\t"+auxrep34.getNumeros()+"\n";
+                }
                 textField.setText(r2);
                 
                 gridPane.add(textField, 0, posicion_tabla+1,2,4);
