@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author wcade
  */
-public class Mes {
+public class Mes implements Comparable<Mes>{
     private int anio;
     private int mes;
     private String nombre;
@@ -100,6 +100,21 @@ public class Mes {
     @Override
     public String toString() {
         return "Mes{" + "Anio=" + anio + ", Mes=" + mes + ", nombre=" + nombre + '}';
+    }
+
+    @Override
+    public int compareTo(Mes o) {
+        if(o.anio == this.anio){
+            if (this.mes < o.mes) {
+                return -1;
+            }
+            if (this.mes > o.mes) {
+                return 1;
+            }
+            return 0;
+        }else{
+            return 0;
+        }            
     }
 
     

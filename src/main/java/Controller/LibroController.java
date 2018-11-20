@@ -134,6 +134,7 @@ public class LibroController {
             Anio a_util = anios.get(randInt(0, 20));
             Mes m = a_util.getMess().get(randInt(1, 12));
             l.setMes(m);
+            m.addLibro(l);
             biblioteca.add(l);
             
         }

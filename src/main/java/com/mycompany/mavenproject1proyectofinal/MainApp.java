@@ -159,7 +159,7 @@ public class MainApp extends Application {
         //Where the GUI is created:
         
         Menu menuR = new Menu("Reportes");
-        MenuItem menuItem1 = new MenuItem("Busqueda por Mes");
+        MenuItem menuItem1 = new MenuItem("Reporte de meses que no se registro compras de revistas");
         MenuItem menuItem2 = new MenuItem("Reportes revistas por mes");
         MenuItem menuItem3 = new MenuItem("Reportes Promedio de revistas recibidas");
         MenuItem menuItem4 = new MenuItem("Reportes revistas por mes");
@@ -325,7 +325,36 @@ public class MainApp extends Application {
         });
         gridPane.add(itemsz, 1, posicion);
     }
-
+    private Anio solo_anio_actual;
+    private void cargarSoloAnios(final GridPane gridPane, final int posicion,final String titulo) {
+        Label GeneradorLabel = new Label("Anio "+titulo+": ");
+        gridPane.add(GeneradorLabel, 0, posicion);
+        
+         List<Anio> anios = this.biblioteca.getAnios();                 
+        
+        ObservableList<Anio> observableList = FXCollections.observableList(anios);
+        ListView<Anio> itemsz = new ListView<Anio>(observableList);
+        itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Anio>() {
+             @Override
+             public void changed(ObservableValue<? extends Anio> observable, Anio oldValue, Anio newValue) {
+                 solo_anio_actual = observable.getValue();
+                 
+             }
+        });
+        gridPane.add(itemsz, 1, posicion);
+    }
+    
+private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion, String titulo) {
+        Label GeneradorLabel = new Label("Meses "+titulo+": ");
+        gridPane.add(GeneradorLabel, 0, posicion);
+        
+         List<Mes> mess = meses;                 
+        
+        ObservableList<Mes> observableList = FXCollections.observableList(mess);
+        ListView<Mes> itemsz = new ListView<Mes>(observableList);
+        
+        gridPane.add(itemsz, 1, posicion);
+    }
     private void cargarListaGeneradores(int posicionTabla,List<Libros> libros ) {
         Label GeneradorLabel = new Label("Biblioteca : ");
         gridPane.add(GeneradorLabel, 0, posicionTabla+1);
@@ -348,8 +377,17 @@ public class MainApp extends Application {
     }
     
     private void reporteTotal_1(){
-            this.cargarAnios(gridPane,1,"Inicio");
-            this.cargarAnios(gridPane,3,"Fin");
+        
+        // Add Header
+        Label headerLabel = new Label("Reporte de meses que no se registro compras de revistas");
+        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        gridPane.add(headerLabel, 0, 0, 2, 1);
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
+        
+        
+        this.cargarSoloAnios(gridPane,1,"");
+            
             
             int posicion_boton = 5;
         // Add Submit Button
@@ -364,13 +402,20 @@ public class MainApp extends Application {
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                
-                cargarListaGeneradores(posicion_tabla, biblioteca.getBiblioteca());
+                ArrayList<Mes> meses =solo_anio_actual.getMess();
+                ArrayList<Mes> meses_rep1 =new ArrayList<Mes>();
+                for (int i = 0; i < meses.size(); i++) {
+                    Mes auxMes1 = meses.get(i);
+                    if(auxMes1.getBiblioteca_mes().size() ==0 ){
+                        meses_rep1.add(auxMes1);
+                    }
+                }
+                cargarSoloMes(gridPane, meses_rep1,posicion_tabla+1,"Sin Libros" );
 
             }
         });
         
-        cargarListaGeneradores( posicion_tabla, biblioteca.getBiblioteca());
+        
             
     }
 
