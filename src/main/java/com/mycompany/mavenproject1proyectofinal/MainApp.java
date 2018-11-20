@@ -34,6 +34,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import model.Anio;
 import model.Libros;
@@ -160,7 +161,7 @@ public class MainApp extends Application {
         
         Menu menuR = new Menu("Reportes");
         MenuItem menuItem1 = new MenuItem("Reporte de meses que no se registro compras de revistas");
-        MenuItem menuItem2 = new MenuItem("Reportes revistas por mes");
+        MenuItem menuItem2 = new MenuItem("Reporte por rango trimestre mostrar promedio de revistas recibidas");
         MenuItem menuItem3 = new MenuItem("Reportes Promedio de revistas recibidas");
         MenuItem menuItem4 = new MenuItem("Reportes revistas por mes");
         MenuItem menuItem5 = new MenuItem("Reportes revistas por mes - conteo");        
@@ -181,7 +182,7 @@ public class MainApp extends Application {
             @Override
             public void handle(ActionEvent event) {
                 gridPane.getChildren().clear();
-                addUIControls() ;
+                reporteTotal_2() ;
             }
         });
         
@@ -411,6 +412,72 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
                     }
                 }
                 cargarSoloMes(gridPane, meses_rep1,posicion_tabla+1,"Sin Libros" );
+
+            }
+        });
+        
+        
+            
+    }
+    
+    private void reporteTotal_2(){
+        
+        // Add Header
+        Label headerLabel = new Label("Reporte por rango trimestre mostrar promedio de revistas recibidas");
+        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        gridPane.add(headerLabel, 0, 0, 2, 1);
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
+        
+        
+        this.cargarSoloAnios(gridPane,1,"");
+            
+            
+            int posicion_boton = 5;
+        // Add Submit Button
+        Button submitButton = new Button("Buscar");
+        submitButton.setPrefHeight(40);
+        submitButton.setDefaultButton(true);
+        submitButton.setPrefWidth(100);
+        gridPane.add(submitButton, 0, posicion_boton, 2, 1);
+        GridPane.setHalignment(submitButton, HPos.CENTER);
+        GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
+        final int posicion_tabla = 7;
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ArrayList<Mes> meses =solo_anio_actual.getMess();
+                ArrayList<Mes> meses_rep1 =new ArrayList<Mes>();
+                double primTrim=0;
+                double secTrim=0;
+                double tercTrim=0;
+                double cuartTrim=0;
+                for (int i = 0; i < meses.size(); i++) {
+                    Mes auxMes1 = meses.get(i);
+                    if(i == 0 || i == 1 || i == 2){
+                        primTrim += auxMes1.getBiblioteca_mes().size();
+                    }
+                    if(i == 3 || i == 4 || i == 5){
+                        secTrim += auxMes1.getBiblioteca_mes().size();
+                    }
+                    if(i == 6 || i == 7 || i == 8){
+                        tercTrim += auxMes1.getBiblioteca_mes().size();
+                    }
+                    if(i == 9 || i == 10 || i == 11){
+                        cuartTrim += auxMes1.getBiblioteca_mes().size();
+                    }
+                    
+                }
+                TextArea textField = new TextArea();  
+                String r2 ="";
+                r2 += "\t Reporte: "+solo_anio_actual.getAnio()+"\n";
+                r2 += "Primer\tSegundo\tTercero\tCuarta\t\n";
+                r2 += String.format( "%.2f",primTrim/3)+"\t\t" +String.format( "%.2f",secTrim/3)+ "\t\t" +
+                        String.format( "%.2f",tercTrim/3)+ "\t\t" +String.format( "%.2f",cuartTrim/3)+ "\t\n";
+                textField.setText(r2);
+                
+                gridPane.add(textField, 0, posicion_tabla+1,2,4);
+                
 
             }
         });
