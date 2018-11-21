@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -255,6 +256,34 @@ public class Libros implements Comparable<Libros> {
     @Override
     public int compareTo(Libros o) {
         //return this.numero.compareTo(o.numero);        
-        return this.title.compareTo(o.title);        
-    }            
+        //return this.title.compareTo(o.title);        
+        return Integer.valueOf(this.id).compareTo(o.id);
+    }         
+    /*Comparator for sorting the list by roll no*/
+    public static Comparator<Libros> PorNumero = new Comparator<Libros>() {
+
+	public int compare(Libros s1, Libros s2) {
+
+	   //int rollno1 = s1.getRollno();
+	   //int rollno2 = s2.getRollno();
+
+	   /*For ascending order*/
+	   //return rollno1-rollno2;
+            return s1.title.compareTo(s2.title);
+	   /*For descending order*/
+	   //rollno2-rollno1;
+   }};
+    
+    public static Comparator<Libros> PorTitulo = new Comparator<Libros>() {
+
+	public int compare(Libros s1, Libros s2) {
+	   String StudentName1 = s1.getTitle().toUpperCase();
+	   String StudentName2 = s2.getTitle().toUpperCase();
+
+	   //ascending order
+	   return StudentName1.compareTo(StudentName2);
+
+	   //descending order
+	   //return StudentName2.compareTo(StudentName1);
+    }};
 }

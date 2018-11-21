@@ -165,13 +165,14 @@ public class MainApp extends Application {
         MenuItem menuItem1 = new MenuItem("Reporte de meses que no se registro compras de revistas");
         MenuItem menuItem2 = new MenuItem("Reporte por rango trimestre mostrar promedio de revistas recibidas");
         MenuItem menuItem3 = new MenuItem("Reporte de continuidad, mas meses (Mas Numeros) , soportar duplicidad de datos.");
-        MenuItem menuItem4 = new MenuItem("Reportes revistas por mes");
+        MenuItem menuItem4 = new MenuItem("Reporte ordenado por numero de cada revista que se recibio en el anio");
         MenuItem menuItem5 = new MenuItem("Reportes revistas por mes - conteo");        
         MenuItem menuItem6 = new MenuItem("Reportes revistas ordenado");        
         
         menuR.getItems().add(menuItem1);
         menuR.getItems().add(menuItem2);
         menuR.getItems().add(menuItem3);
+        menuR.getItems().add(menuItem4);
         
         menuItem1.setOnAction(new EventHandler<ActionEvent>() {            
             @Override
@@ -193,6 +194,14 @@ public class MainApp extends Application {
             public void handle(ActionEvent event) {
                 gridPane.getChildren().clear();
                 reporteTotal_3() ;
+            }
+        });
+        
+        menuItem4.setOnAction(new EventHandler<ActionEvent>() {            
+            @Override
+            public void handle(ActionEvent event) {
+                gridPane.getChildren().clear();
+                reporteTotal_4() ;
             }
         });
         
@@ -370,7 +379,7 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
         Label GeneradorLabel = new Label("Biblioteca : ");
         gridPane.add(GeneradorLabel, 0, posicionTabla+1);
 
-        Collections.sort(libros);//para ordenar segun titulo
+        //Collections.sort(libros);//para ordenar segun titulo
                 ObservableList<Libros> observableList = FXCollections.observableList(libros);
                 ListView<Libros> itemsz = new ListView<Libros>(observableList);
                 itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Libros>() {
@@ -557,6 +566,42 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
             
     }
 
+    private void reporteTotal_4(){
+        
+        // Add Header
+        Label headerLabel = new Label("Reporte ordenado por numero de cada revista que se recibio en el anio.");
+        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        gridPane.add(headerLabel, 0, 0, 2, 1);
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));                           
+            
+            int posicion_boton = 5;
+        // Add Submit Button
+        Button submitButton = new Button("Buscar");
+        submitButton.setPrefHeight(40);
+        submitButton.setDefaultButton(true);
+        submitButton.setPrefWidth(100);
+        gridPane.add(submitButton, 0, posicion_boton, 2, 1);
+        GridPane.setHalignment(submitButton, HPos.CENTER);
+        GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
+        final int posicion_tabla = 7;
+        
+        final List<UtilLibrosNumero> re3 = new ArrayList();
+        
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                List<Libros> aux_lib = biblioteca.getBiblioteca();
+                Collections.sort(aux_lib,Libros.PorNumero);//para ordenar segun titulo                
+                
+                cargarListaGeneradores(posicion_tabla+1,aux_lib);
+            }
+        });
+        
+        
+            
+    }
+    
     private void addUIControlsParams(final GridPane gridPane,Libros libro) {
         // Add Header
         Label headerLabel = new Label("Detalle Libro");
