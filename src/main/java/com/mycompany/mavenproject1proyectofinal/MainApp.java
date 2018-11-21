@@ -166,13 +166,22 @@ public class MainApp extends Application {
         MenuItem menuItem2 = new MenuItem("Reporte por rango trimestre mostrar promedio de revistas recibidas");
         MenuItem menuItem3 = new MenuItem("Reporte de continuidad, mas meses (Mas Numeros) , soportar duplicidad de datos.");
         MenuItem menuItem4 = new MenuItem("Reporte ordenado por numero de cada revista que se recibio en el anio");
-        MenuItem menuItem5 = new MenuItem("Reportes revistas por mes - conteo");        
+        MenuItem menuItem5 = new MenuItem("Revistas disponibles por mes");        
         MenuItem menuItem6 = new MenuItem("Reportes revistas ordenado");        
         
+        menuR.getItems().add(menuItem5);
         menuR.getItems().add(menuItem1);
         menuR.getItems().add(menuItem2);
         menuR.getItems().add(menuItem3);
         menuR.getItems().add(menuItem4);
+        
+        menuItem5.setOnAction(new EventHandler<ActionEvent>() {            
+            @Override
+            public void handle(ActionEvent event) {
+                gridPane.getChildren().clear();
+                reporteTotal_5() ;
+            }
+        });
         
         menuItem1.setOnAction(new EventHandler<ActionEvent>() {            
             @Override
@@ -394,6 +403,43 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
                 });
                 gridPane.add(itemsz, 1, posicionTabla+1);
          /**/
+    }
+    
+    private void reporteTotal_5(){
+        
+        // Add Header
+        Label headerLabel = new Label("Revistas disponibles por mes");
+        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        gridPane.add(headerLabel, 0, 0, 2, 1);
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
+        
+        
+        this.cargarAnios(gridPane,2,"");
+            
+            
+            int posicion_boton = 5;
+        // Add Submit Button
+        Button submitButton = new Button("Buscar");
+        submitButton.setPrefHeight(40);
+        submitButton.setDefaultButton(true);
+        submitButton.setPrefWidth(100);
+        gridPane.add(submitButton, 0, posicion_boton, 2, 1);
+        GridPane.setHalignment(submitButton, HPos.CENTER);
+        GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
+        final int posicion_tabla = 7;
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Mes mes_reporte_actual = mes_actual;
+                
+                cargarListaGeneradores(posicion_tabla+1,mes_reporte_actual.getBiblioteca_mes());
+
+            }
+        });
+        
+        
+            
     }
     
     private void reporteTotal_1(){
