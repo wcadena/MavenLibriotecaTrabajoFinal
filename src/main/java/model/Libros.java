@@ -269,7 +269,7 @@ public class Libros implements Comparable<Libros> {
 
 	   /*For ascending order*/
 	   //return rollno1-rollno2;
-            return s1.title.compareTo(s2.title);
+            return s1.numero.compareTo(s2.numero);
 	   /*For descending order*/
 	   //rollno2-rollno1;
    }};
