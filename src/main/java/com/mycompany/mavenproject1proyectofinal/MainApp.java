@@ -575,14 +575,16 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
             public void handle(ActionEvent event) {
                 List<Libros> aux_lib = biblioteca.getBiblioteca();
                 for (int i = 0; i < aux_lib.size(); i++) {
-                    Libros auxMes1 = aux_lib.get(i);     
-                    UtilLibrosNumero auxR3 = UtilLibrosNumero.findCustomerByid(re3, auxMes1.getTitle());
-                    System.out.println("++++++>"+auxR3);
-                    if(auxR3 != null){
+                    Libros auxMes1 = aux_lib.get(i);    
+                    int posicion = UtilLibrosNumero.findCustomerByid(re3, auxMes1.getTitle());
+                    
+                   
+                    if(posicion >=0){
+                        UtilLibrosNumero auxR3 = re3.get(posicion);
                         List<String> auxNumx1= auxR3.getNumeros();
                         auxNumx1.add(auxMes1.getNumero());
                         auxR3.setNumeros(auxNumx1);
-                        re3.add(auxR3);
+                        re3.set(posicion,auxR3);
                     }else{
                         UtilLibrosNumero auxR33 = new UtilLibrosNumero(auxMes1.getTitle());
                         List<String> auxNumx12= auxR33.getNumeros();
@@ -591,11 +593,13 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
                         re3.add(auxR33);
                     }
                 }          
-                System.out.println("---+++++*******----->\n"+re3);
+                
                 TextArea textField = new TextArea();  
                 String r2 ="";
                 r2 += "\t Reporte: Por Titulo \n";
                 r2 += "Titulo\t\t\t\t\tNumero\n";
+                
+                Collections.sort(re3);                
                 for (int j = 0; j < re3.size(); j++) {
                     UtilLibrosNumero auxrep34 = re3.get(j);  
                     r2 += auxrep34.getTitulo()+"\t\t\t\t\t"+auxrep34.getNumeros()+"\n";
