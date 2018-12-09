@@ -731,7 +731,7 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
             
     }
     
-    private void addUIControlsParams(final GridPane gridPane,Libros libro) {
+    private void addUIControlsParams(final GridPane gridPane,final Libros libro) {
         // Add Header
         Label headerLabel = new Label("Detalle Libro");
         headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
@@ -754,7 +754,64 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
         title.setText(libro.getTitle());
         final TextField numero = new TextField();
         this.addInput( numero, "Numero", 5);
-        numero.setText(libro.getNumero());        
+        numero.setText(libro.getNumero()); 
+        ////////////////////////////////////////////////////////
+
+        ///////////////////////////////////////////////////////
+        //cargarAlarmas(gridPane);
+        ////////////////////////////////////////////////////////
+
+        // Add Submit Button
+        Button submitButton = new Button("Editar");
+        submitButton.setPrefHeight(40);
+        submitButton.setDefaultButton(true);
+        submitButton.setPrefWidth(100);
+        gridPane.add(submitButton, 1, 6);
+        GridPane.setHalignment(submitButton, HPos.CENTER);
+        GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
+
+        submitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (validate( author, "Autor")) {                    
+                    return;
+                };
+                if (validate( genre, "Genero")) {
+                    return;
+                };
+                if (validate( publisher, "Publicadora")) {
+                    return;
+                };
+                if (validate( title, "Titulo")) {
+                    return;
+                };
+                if (validate(numero, "Numero")) {
+                    return;
+                };
+                String someString = numero.getText();
+                if (!isNumericRegex(someString)) {
+                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a Numero con solo digitos.");
+                    return;
+                }
+                
+                try {
+                    List<Libros> auxBiblio = biblioteca.getBiblioteca();
+                    auxBiblio.remove(libro);
+                    biblioteca.setBiblioteca((ArrayList<Libros>) auxBiblio);
+                    Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), numero.getText(),libro.getMes());
+                    //(fabricante.getText(),modelo.getText(),codigo.getText());
+                    
+                    biblioteca.addLibro(Generador);
+                    showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Edition Successful!", "Se edito  el libro" + title.getText() + " de " + author.getText());
+                    
+                    gridPane.getChildren().clear();
+                    cargarListaGeneradores( 2, biblioteca.getBiblioteca());
+                    /**/
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
 
     private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
