@@ -297,6 +297,11 @@ public class MainApp extends Application {
                 if (validate(numero, "Numero")) {
                     return;
                 };
+                String someString = numero.getText();
+                if (!isNumericRegex(someString)) {
+                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a Numero con solo digitos.");
+                    return;
+                }
                 
                 try {
                     Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), numero.getText(),mes_actual);
@@ -316,7 +321,13 @@ public class MainApp extends Application {
         
         cargarListaGeneradores( posicion_tabla, biblioteca.getBiblioteca());
     }
-    
+    private boolean isNumericRegex(String someString) {
+                if (someString == null) {
+                    return false;
+                }
+                return someString.matches("-?\\d+");
+            }
+   
     private void cargarAnios(final GridPane gridPane, final int posicion,final String titulo) {
         Label GeneradorLabel = new Label("Anio "+titulo+": ");
         gridPane.add(GeneradorLabel, 0, posicion);
@@ -743,74 +754,7 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
         title.setText(libro.getTitle());
         final TextField numero = new TextField();
         this.addInput( numero, "Numero", 5);
-        numero.setText(libro.getNumero());
-        ////////////////////////////////////////////////////////
-
-        ///////////////////////////////////////////////////////
-        //cargarAlarmas(gridPane);
-        ////////////////////////////////////////////////////////
-
-        // Add Submit Button
-        Button submitButton = new Button("Crear");
-        submitButton.setPrefHeight(40);
-        submitButton.setDefaultButton(true);
-        submitButton.setPrefWidth(100);
-        gridPane.add(submitButton, 1, 6);
-        GridPane.setHalignment(submitButton, HPos.CENTER);
-        GridPane.setMargin(submitButton, new Insets(20, 0, 20, 0));
-
-        submitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Mensage!", "No es parte de Tarea");
-                /*
-                 if(alarma_actual == null) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Debe elegir Alarma");
-                    return;                    
-                }*/
- /*
-                 //int id, String nombre, int rango_minimo, int rango_maximo, int valor_actual, Alarma tipo_alarma
-                ParametroGenerador parametro = new ParametroGenerador(1,nombre.getText(),Integer.parseInt(rango_minimo.getText()),Integer.parseInt(rango_maximo.getText()),Integer.parseInt(valor_actual.getText()),alarma_actual);    
-                generador_actual.addParametro(parametro);
-                
-                showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Se creo  el Parametro de" + generador_actual.getModelo()+ " de " + generador_actual.getFabricante());
-                System.out.println(gc.lista_generadores);
-                cargarlistaParametros(gridPane);
-                 */
-            }
-        });
-        
-        // Add regresa Button
-        Button regresaButton = new Button("< Regresa");
-        regresaButton.setPrefHeight(40);
-        regresaButton.setDefaultButton(true);
-        regresaButton.setPrefWidth(100);
-        gridPane.add(regresaButton, 0, 6);
-        GridPane.setHalignment(regresaButton, HPos.CENTER);
-        GridPane.setMargin(regresaButton, new Insets(20, 0, 20, 0));
-        regresaButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                gridPane.getChildren().clear();// para volver a lista de generadores
-                addUIControls();
-            }
-        });
-        // Add Calcula Button
-        /*Button CalculaButton = new Button("Calcula");
-        CalculaButton.setPrefHeight(40);
-        CalculaButton.setDefaultButton(true);
-        CalculaButton.setPrefWidth(100);
-        gridPane.add(CalculaButton, 2, 6);
-        GridPane.setHalignment(CalculaButton, HPos.CENTER);
-        GridPane.setMargin(CalculaButton, new Insets(20, 0, 20, 0));*/
-        /*
-        CalculaButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Calculo Realizado!", "El calculo de Media es:"+Parametro_actual.alteracionMedia());                        
-            }
-        });
-         */
+        numero.setText(libro.getNumero());        
     }
 
     private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
