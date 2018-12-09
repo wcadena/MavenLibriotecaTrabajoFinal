@@ -1,6 +1,7 @@
 package com.mycompany.mavenproject1proyectofinal;
 
 import Controller.LibroController;
+import javafx.scene.image.Image;
 import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -54,7 +56,7 @@ public class MainApp extends Application {
         primaryStage.setTitle("Biblioteca");
 
         // Create the registration form grid pane
-        this.gridPane = createRegistrationGenerador();
+        this.gridPane = inicializarPanelGrid();
         // Add UI controls to the registration form grid pane
         (new Libros()).setId_secuencial(1);//set 1 id libros
         
@@ -74,9 +76,12 @@ public class MainApp extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.show();
+        
+        bienvenida();
     }
+   
 
-    private GridPane createRegistrationGenerador() {
+    private GridPane inicializarPanelGrid() {
         // Instantiate a new Grid Pane
         GridPane gridPane = new GridPane();
 
@@ -106,6 +111,25 @@ public class MainApp extends Application {
         return gridPane;
     }
 
+     private void bienvenida() throws FileNotFoundException{        
+        
+        Image image1 = new Image("File:Hemeroteca.gif");
+        ImageView ima1 = new ImageView(image1);
+        GridPane.setHalignment(ima1, HPos.CENTER);
+        gridPane.add(ima1, 1, 1);
+       
+        Image image2 = new Image("File:Stanlee.gif");
+        ImageView ima2 = new ImageView(image2);
+        GridPane.setHalignment(ima2, HPos.CENTER);
+        gridPane.add(ima2, 1, 2);
+        
+        Label headerLabel = new Label("Instricciones:");
+        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        gridPane.add(headerLabel, 1, 3, 2, 1);
+        GridPane.setHalignment(headerLabel, HPos.CENTER);
+        GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
+    }
+     
     private void addInput( TextField campo_texto, String nombre, int posicion) {
         // Add Name Label
         Label nameLabel = new Label(nombre);
