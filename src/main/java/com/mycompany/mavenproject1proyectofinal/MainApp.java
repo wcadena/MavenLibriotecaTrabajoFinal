@@ -26,6 +26,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
@@ -466,8 +467,12 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
         mes.setCellValueFactory(
                 new PropertyValueFactory<Libros, Mes>("mes"));
 
+        TableColumn anio = new TableColumn("Año");
+        anio.setCellValueFactory(
+                new PropertyValueFactory<Libros, String>("anio"));
+        
         table.setItems(observableList);
-        table.getColumns().addAll(title, author, genre, publisher, numero, mes);
+        table.getColumns().addAll(title, author, genre, publisher, numero, mes,anio);
 
         gridPane.add(table, 1, posicionTabla + 1);
         

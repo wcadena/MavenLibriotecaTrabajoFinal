@@ -117,7 +117,9 @@ public class Mes implements Comparable<Mes>{
         }            
     }
 
-    
+    public String getAnio() {
+        return this.anio+"";
+    }
 
     
 }

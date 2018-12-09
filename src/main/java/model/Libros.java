@@ -209,6 +209,14 @@ public class Libros implements Comparable<Libros> {
     public Mes getMes() {
         return mes;
     }
+    
+    /**
+     * se crea mutador de fecha de libro para presentar los anios del mes.
+     * @return 
+     */
+    public String getAnio() {
+        return mes.getAnio()+"";
+    }
 
     public void setMes(Mes mes) {
         this.mes = mes;
