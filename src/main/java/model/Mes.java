@@ -99,7 +99,7 @@ public class Mes implements Comparable<Mes>{
 
     @Override
     public String toString() {
-        return "Mes{" + "Anio=" + anio + ", Mes=" + mes + ", nombre=" + nombre + '}';
+        return  nombre ;
     }
 
     @Override

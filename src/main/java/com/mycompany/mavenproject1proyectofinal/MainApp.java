@@ -427,19 +427,6 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
 
         //Collections.sort(libros);//para ordenar segun titulo
         ObservableList<Libros> observableList = FXCollections.observableList(libros);
-        /*        ListView<Libros> itemsz = new ListView<Libros>(observableList);
-                itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Libros>() {
-                    
-            @Override
-            public void changed(ObservableValue<? extends Libros> observable, Libros oldValue, Libros newValue) {
-                 //System.out.println("--->"+observable.getValue().getTitle());                        
-                        libro_actual = observable.getValue();
-                        gridPane.getChildren().clear();
-                        addUIControlsParams(gridPane,libro_actual);//se vuelve a cargar la pantalla de generadores
-            }
-                });
-                gridPane.add(itemsz, 1, posicionTabla+1);
-         */
 
         TableView<Libros> table = new TableView<Libros>();
         table.setEditable(true);
