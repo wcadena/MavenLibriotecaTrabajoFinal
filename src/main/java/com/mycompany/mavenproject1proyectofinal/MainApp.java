@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -22,14 +23,19 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -49,6 +55,7 @@ public class MainApp extends Application {
     private int id_libros;
     MenuBar menuBar = new MenuBar();
     
+    private Stage primaryStage_master;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -78,6 +85,7 @@ public class MainApp extends Application {
         primaryStage.show();
         
         bienvenida();
+        this.primaryStage_master = primaryStage;
     }
    
 
@@ -408,13 +416,18 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
         
         gridPane.add(itemsz, 1, posicion);
     }
-    private void cargarListaGeneradores(int posicionTabla,List<Libros> libros ) {
+
+    
+
+    private void cargarListaGeneradores(int posicionTabla, List<Libros> libros) {
+
+        
         Label GeneradorLabel = new Label("Biblioteca : ");
-        gridPane.add(GeneradorLabel, 0, posicionTabla+1);
+        gridPane.add(GeneradorLabel, 0, posicionTabla + 1);
 
         //Collections.sort(libros);//para ordenar segun titulo
-                ObservableList<Libros> observableList = FXCollections.observableList(libros);
-                ListView<Libros> itemsz = new ListView<Libros>(observableList);
+        ObservableList<Libros> observableList = FXCollections.observableList(libros);
+        /*        ListView<Libros> itemsz = new ListView<Libros>(observableList);
                 itemsz.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Libros>() {
                     
             @Override
@@ -426,7 +439,51 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
             }
                 });
                 gridPane.add(itemsz, 1, posicionTabla+1);
-         /**/
+         */
+
+        TableView<Libros> table = new TableView<Libros>();
+        table.setEditable(true);
+
+        TableColumn title = new TableColumn("Titulo");
+        title.setCellValueFactory(
+                new PropertyValueFactory<Libros, String>("title"));
+
+        TableColumn author = new TableColumn("Autor");
+        author.setCellValueFactory(
+                new PropertyValueFactory<Libros, String>("author"));
+
+        TableColumn genre = new TableColumn("Genero");
+        genre.setCellValueFactory(
+                new PropertyValueFactory<Libros, String>("genre"));
+
+        TableColumn publisher = new TableColumn("Publicadora");
+        publisher.setCellValueFactory(
+                new PropertyValueFactory<Libros, String>("publisher"));
+
+        TableColumn numero = new TableColumn("Número");
+        numero.setCellValueFactory(
+                new PropertyValueFactory<Libros, String>("numero"));
+
+        TableColumn mes = new TableColumn("Fecha");
+        mes.setCellValueFactory(
+                new PropertyValueFactory<Libros, Mes>("mes"));
+
+        table.setItems(observableList);
+        table.getColumns().addAll(title, author, genre, publisher, numero, mes);
+
+        gridPane.add(table, 1, posicionTabla + 1);
+        
+
+        table.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Libros>() {
+
+            @Override
+            public void changed(ObservableValue<? extends Libros> observable, Libros oldValue, Libros newValue) {
+                //System.out.println("--->"+observable.getValue().getTitle());                        
+                libro_actual = observable.getValue();
+                gridPane.getChildren().clear();
+                addUIControlsParams(gridPane, libro_actual);//se vuelve a cargar la pantalla de generadores
+            }
+        });
     }
     
     private void reporteTotal_5(){
