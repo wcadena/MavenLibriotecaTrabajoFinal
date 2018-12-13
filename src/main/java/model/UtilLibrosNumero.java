@@ -15,7 +15,7 @@ import java.util.List;
 public class UtilLibrosNumero implements Comparable<UtilLibrosNumero> {
 
     private String titulo;
-    private List<String> numeros;
+    private List<Integer> numeros;
 
     public UtilLibrosNumero(String titulo) {
         this.titulo = titulo;
@@ -30,11 +30,11 @@ public class UtilLibrosNumero implements Comparable<UtilLibrosNumero> {
         this.titulo = titulo;
     }
 
-    public List<String> getNumeros() {
+    public List<Integer> getNumeros() {
         return numeros;
     }
 
-    public void setNumeros(List<String> numeros) {
+    public void setNumeros(List<Integer> numeros) {
         this.numeros = numeros;
     }
 

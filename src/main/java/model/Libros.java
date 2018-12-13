@@ -32,7 +32,7 @@ public class Libros implements Comparable<Libros> {
     private String publisher;
     private String title;
     
-    private String numero;
+    private Integer numero;
     
     private Date created_at;
     private Date update_at;
@@ -83,7 +83,7 @@ public class Libros implements Comparable<Libros> {
         this.delete_at = new Date();;
     }
 
-    public Libros(String author, String genre, String publisher, String title, String numero) throws FileNotFoundException {
+    public Libros(String author, String genre, String publisher, String title, Integer numero) throws FileNotFoundException {
         this.id = this.getIdSec();
         this.author = author;
         this.genre = genre;
@@ -92,7 +92,7 @@ public class Libros implements Comparable<Libros> {
         this.numero = numero;
     }
      
-    public Libros( String author, String genre, String publisher, String title, String numero, Mes mes) throws FileNotFoundException {
+    public Libros( String author, String genre, String publisher, String title, Integer numero, Mes mes) throws FileNotFoundException {
         this.id = this.getIdSec();
         this.author = author;
         this.genre = genre;
@@ -174,11 +174,11 @@ public class Libros implements Comparable<Libros> {
         this.title = title;
     }
 
-    public String getNumero() {
+    public Integer getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(Integer numero) {
         this.numero = numero;
     }
 

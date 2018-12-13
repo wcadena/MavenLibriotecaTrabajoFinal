@@ -132,11 +132,11 @@ public class MainApp extends Application {
         GridPane.setHalignment(ima2, HPos.CENTER);
         gridPane.add(ima2, 1, 2);
         
-        Label headerLabel = new Label("Instricciones:");
-        headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-        gridPane.add(headerLabel, 1, 3, 2, 1);
-        GridPane.setHalignment(headerLabel, HPos.CENTER);
-        GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
+        //Label headerLabel = new Label("Instricciones:");
+        //headerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+        //gridPane.add(headerLabel, 1, 3, 2, 1);
+        //GridPane.setHalignment(headerLabel, HPos.CENTER);
+        //GridPane.setMargin(headerLabel, new Insets(20, 0, 20, 0));
     }
      
     private void addInput( TextField campo_texto, String nombre, int posicion) {
@@ -267,7 +267,7 @@ public class MainApp extends Application {
         final TextField title = new TextField();
         this.addInput( title, "Titulo", 4);
         final TextField numero = new TextField();
-        this.addInput( numero, "Numero", 5);
+        this.addInput( numero, "Numero de Edicion", 5);
         this.cargarAnios(gridPane,6,"");
         
         int posicion_boton = 9;
@@ -295,21 +295,21 @@ public class MainApp extends Application {
                 if (validate( title, "Titulo")) {
                     return;
                 };
-                if (validate(numero, "Numero")) {
+                if (validate(numero, "Numero de Edicion")) {
                     return;
                 };
                 String someString = numero.getText();
                 if (!isNumericRegex(someString)) {
-                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Please enter a Numero con solo digitos.");
+                    showAlert(Alert.AlertType.ERROR, gridPane.getScene().getWindow(), "Form Error!", "Porfavor ingresar solo Numero.");
                     return;
                 }
                 
                 try {
-                    Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), numero.getText(),mes_actual);
+                    Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), Integer.parseInt(numero.getText()),mes_actual);
                     //(fabricante.getText(),modelo.getText(),codigo.getText());
                     
                     biblioteca.addLibro(Generador);
-                    showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Se creo  el libro" + title.getText() + " de " + author.getText());
+                    showAlert(Alert.AlertType.CONFIRMATION, gridPane.getScene().getWindow(), "Registration Successful!", "Se creo  el libro" + " " + title.getText() + " de " + author.getText());
                     //System.out.println(gc.lista_generadores);
                     
                     cargarListaGeneradores( posicion_tabla, biblioteca.getBiblioteca() );
@@ -459,7 +459,7 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
         publisher.setCellValueFactory(
                 new PropertyValueFactory<Libros, String>("publisher"));
 
-        TableColumn numero = new TableColumn("Número");
+        TableColumn numero = new TableColumn("Número de Edicion");
         numero.setCellValueFactory(
                 new PropertyValueFactory<Libros, String>("numero"));
 
@@ -665,13 +665,13 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
                    
                     if(posicion >=0){
                         UtilLibrosNumero auxR3 = re3.get(posicion);
-                        List<String> auxNumx1= auxR3.getNumeros();
+                        List<Integer> auxNumx1= auxR3.getNumeros();
                         auxNumx1.add(auxMes1.getNumero());
                         auxR3.setNumeros(auxNumx1);
                         re3.set(posicion,auxR3);
                     }else{
                         UtilLibrosNumero auxR33 = new UtilLibrosNumero(auxMes1.getTitle());
-                        List<String> auxNumx12= auxR33.getNumeros();
+                        List<Integer> auxNumx12= auxR33.getNumeros();
                         auxNumx12.add(auxMes1.getNumero());
                         auxR33.setNumeros(auxNumx12);                        
                         re3.add(auxR33);
@@ -759,7 +759,7 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
         title.setText(libro.getTitle());
         final TextField numero = new TextField();
         this.addInput( numero, "Numero", 5);
-        numero.setText(libro.getNumero()); 
+        numero.setText(""+libro.getNumero()); 
         ////////////////////////////////////////////////////////
 
         ///////////////////////////////////////////////////////
@@ -803,7 +803,7 @@ private void cargarSoloMes(GridPane gridPane, ArrayList<Mes> meses,int posicion,
                     List<Libros> auxBiblio = biblioteca.getBiblioteca();
                     auxBiblio.remove(libro);
                     biblioteca.setBiblioteca((ArrayList<Libros>) auxBiblio);
-                    Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), numero.getText(),libro.getMes());
+                    Libros Generador = new Libros(author.getText(), genre.getText(), publisher.getText(), title.getText(), Integer.parseInt(numero.getText()),libro.getMes());
                     //(fabricante.getText(),modelo.getText(),codigo.getText());
                     
                     biblioteca.addLibro(Generador);

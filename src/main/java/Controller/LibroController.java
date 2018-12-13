@@ -120,7 +120,7 @@ public class LibroController {
             l.setGenre(faker.book().genre());
             l.setPublisher(faker.book().publisher());
             l.setId(i);
-            l.setNumero(""+(int)(Math.random()*1000));
+            l.setNumero((int)(Math.random()*1000));
             Date dNow = new Date();
 
             String date_s = "1985-01-18 00:00:00.0";
